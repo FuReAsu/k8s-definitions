@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voting-app
+  namespace: demo
+spec:
+  selector:
+    matchLabels:
+      role: vote
+      app: voting-app
+  replicas: 2
+  template:
+    metadata:
+      name: voting-app
+      namespace: demo
+      labels:
+        role: vote
+        app: voting-app 
+    spec:
+      containers:
+        - name: voting-app
+          image: kodekloud/examplevotingapp_vote:v1
+          ports:
+            - name: http-standard
+              containerPort: 80
+              protocol: TCP
+    

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websvr-deployment
+  namespace: website
+  labels:
+    env: testing
+    service: web
+spec:
+  selector:
+    matchLabels:
+      role: frontend
+      service: web
+  replicas: 3
+  template:
+    metadata:
+      name: websvr
+      namespace: website
+      labels:
+        role: frontend
+        service: web
+    spec:
+      containers:
+        - name: websvr
+          image: nginx:latest
+          ports:
+            - name: http-standard
+              containerPort: 80
+              protocol: TCP
+  strategy:
+    type: RollingUpdate #Recreate
+    rollingUpdate:
+      maxSurge: 15%
+      maxUnavailable: 50% 

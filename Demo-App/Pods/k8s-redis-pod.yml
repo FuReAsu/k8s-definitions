@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis
+  namespace: demo
+  labels:
+    role: vote
+    app: redis
+spec:
+  containers:
+    - name: redis
+      image: redis:alpine
+      ports:
+        - name: redis-std
+          containerPort: 6379  
+          protocol: TCP

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: demo
+  labels:
+    role: backend
+    name: redis-for-vote
+spec:
+  ports:
+    - port: 6379
+      targetPort: redis-std
+  selector:
+    role: vote
+    app: redis
