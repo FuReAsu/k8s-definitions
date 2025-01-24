@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dbsvr-deployment
+  namespace: website
+  labels:
+    env: testing
+    service: db
+spec:
+  selector:
+    matchLabels:
+      role: backend
+      service: db
+  replicas: 2
+  template:
+    metadata:
+      name: dbsvr
+      namespace: website
+      labels:
+        role: backend
+        service: db
+    spec:
+      containers:
+        - name: dbsvr
+          image: fureasu346/testdbsvr
+          ports:
+            - name: mysql-standard
+              containerPort: 3306
+              protocol: TCP
+  strategy:
+    type: RollingUpdate #Recreate
+    rollingUpdate:
+      maxSurge: 0%
+      maxUnavailable: 50%

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: website
+  labels:
+    role: frontend
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      role: frontend
+      app: nginx
+  replicas: 3
+  template:
+    metadata:
+      name: nginx
+      namespace: website
+      labels:
+        role: frontend
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+
+    

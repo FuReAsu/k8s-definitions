@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simepleweb
+  namespace: lab
+spec:
+  selector:
+    matchLabels:
+      role: frontend
+      app: web-apache-php
+  revisionHistoryLimit: 5
+  replicas: 3
+  template:
+    metadata:
+      name: simepleweb
+      namespace: lab
+      labels:
+        role: frontend
+        app: web-apache-php
+    spec:
+      containers:
+        - name: simepleweb
+          image: fureasu346/simplewebdb_webapachephp:v1
+          env:
+          - name: DB_SERVERNAME
+            value: "simple-db"
+          - name: DB_NAME
+            value: "testdb"
+          - name: DB_USERNAME
+            value: "webserver"
+          - name: DB_PASSWORD
+            value: "webserverP@ssw0rd"
+          - name: WEBSITE_NAME
+            value: "simplewebdb.lab"
+          ports:
+            - name: http-standard
+              containerPort: 80
+              protocol: TCP

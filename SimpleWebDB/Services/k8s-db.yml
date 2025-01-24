@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-db
+  namespace: lab
+  labels:
+    role: backend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306 
+      targetPort: mysql-standard
+  selector:
+    role: backend
+    app: db-mysql
+

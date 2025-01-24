@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpledb 
+  namespace: lab
+spec:
+  selector:
+    matchLabels:
+      role: backend
+      app: db-mysql
+  revisionHistoryLimit: 5
+  replicas: 3
+  template:
+    metadata:
+      name: simpledb
+      namespace: lab
+      labels:
+        role: backend
+        app: db-mysql
+    spec:
+      containers:
+        - name: simepledb
+          image: fureasu346/simplewebdb_dbmysql:v1
+          env:
+          - name: MYSQL_ROOTPASSWORD
+            value: "mysqlP@ssw0rd"
+          - name: MYSQL_USERNAME
+            value: "webserver"
+          - name: MYSQL_USER_PASSWORD
+            value: "webserverP@ssw0rd"
+          - name: MYSQL_REMOTE_HOST
+            value: "%"
+          ports:
+            - name: mysql-standard
+              containerPort: 3306
+              protocol: TCP
+    

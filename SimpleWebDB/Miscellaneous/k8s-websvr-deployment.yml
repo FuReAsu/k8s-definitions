@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websvr-deployment
+  namespace: website
+  labels:
+    env: testing
+    service: web
+spec:
+  selector:
+    matchLabels:
+      role: frontend
+      service: web
+  replicas: 4
+  template:
+    metadata:
+      name: websvr
+      namespace: website
+      labels:
+        role: frontend
+        service: web
+    spec:
+      containers:
+        - name: websvr
+          image: fureasu346/testwebsvr:latest
+          ports:
+            - name: http-standard
+              containerPort: 80
+              protocol: TCP

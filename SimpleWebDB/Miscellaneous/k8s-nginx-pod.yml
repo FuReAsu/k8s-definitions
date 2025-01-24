@@ -1,0 +1,16 @@
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: nginx
+  namespace: website
+  labels:
+    server: nginx
+    role: frontend
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+          protocol: TCP
+
