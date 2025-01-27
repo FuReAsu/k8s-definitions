@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-green
+  namespace: lab
+  labels:
+    group: nginxweblb
+spec:
+  hostname: webgreen-k8s
+  subdomain: nginxweblb
+  containers:
+    - name: web-green
+      image: docker.io/fureasu346/nginx:web_green
+      ports: 
+        - containerPort: 80
+          protocol: TCP
+          hostPort: 7001
+
+      
