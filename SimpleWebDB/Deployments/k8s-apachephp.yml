@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simepleweb
+  name: simpleweb
   namespace: lab
 spec:
   selector:
@@ -12,18 +12,18 @@ spec:
   replicas: 3
   template:
     metadata:
-      name: simepleweb
+      name: simpleweb
       namespace: lab
       labels:
         role: frontend
         app: web-apache-php
     spec:
       containers:
-        - name: simepleweb
+        - name: simpleweb
           image: fureasu346/simplewebdb_webapachephp:v1
           env:
           - name: DB_SERVERNAME
-            value: "simple-db"
+            value: "simple-db.lab.svc.cluster.local"
           - name: DB_NAME
             value: "testdb"
           - name: DB_USERNAME
