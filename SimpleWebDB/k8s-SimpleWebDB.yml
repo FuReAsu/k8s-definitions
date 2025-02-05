@@ -1,3 +1,4 @@
+#web server deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -37,6 +38,7 @@ spec:
               containerPort: 80
               protocol: TCP
 ---
+# database server deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -74,6 +76,7 @@ spec:
               containerPort: 3306
               protocol: TCP
 ---
+#database service
 apiVersion: v1
 kind: Service
 metadata:
@@ -90,6 +93,7 @@ spec:
     role: backend
     app: db-mysql
 ---
+#web service
 apiVersion: v1
 kind: Service
 metadata:
