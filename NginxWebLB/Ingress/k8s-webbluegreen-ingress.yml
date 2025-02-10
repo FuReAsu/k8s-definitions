@@ -1,1 +1,29 @@
 #Ingress for nginx webblue and webgreen
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-blue-green
+  namespace: lab
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: blue.lab
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-blue
+                port:
+                  number: 80
+    - host: green.lab
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-green 
+                port:
+                  number: 80
