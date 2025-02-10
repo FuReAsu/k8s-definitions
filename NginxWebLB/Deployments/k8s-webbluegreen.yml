@@ -1,0 +1,64 @@
+#deployment for web blue and web green (2 of each)
+#web blue deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-blue
+  namespace: lab
+  labels:
+    app: nginx
+    color: blue
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+      color: blue
+  revisionHistoryLimit: 3
+  replicas: 2 
+  template:
+    metadata:
+      name: web-blue
+      namespace: lab
+      labels:
+        app: nginx
+        color: blue
+    spec:
+      containers:
+        - name: nginx-web-blue
+          image: fureasu346/nginx:web_blue
+          ports:
+            - containerPort: 80
+              protocol: TCP
+---
+#web green deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-green
+  namespace: lab
+  labels:
+    app: nginx
+    color: green
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+      color: green
+  revisionHistoryLimit: 3
+  replicas: 2
+  template:
+    metadata:
+      name: web-green
+      namespace: lab
+      labels:
+        app: nginx
+        color: green
+    spec:
+      containers:
+        - name: nginx-web-green
+          image: fureasu346/nginx:web_green
+          ports:
+            - containerPort: 80
+              protocol: TCP
+    
+    

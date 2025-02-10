@@ -3,5 +3,7 @@ Objects include:
 - Pods
 - Deployments
 - Services
+- Ingress
 
-for now.
+Also included is manifests of components required by Kubernetes.
+The folder structure might not be proper.
