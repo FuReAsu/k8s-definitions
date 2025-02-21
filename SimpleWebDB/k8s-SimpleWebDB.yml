@@ -24,7 +24,7 @@ spec:
           image: fureasu346/simplewebdb_webapachephp:v1
           env:
           - name: DB_SERVERNAME
-            value: "simple-db.lab.svc.cluster.local"
+            value: "simple-db"
           - name: DB_NAME
             value: "testdb"
           - name: DB_USERNAME
@@ -102,11 +102,30 @@ metadata:
   labels:
     role: frontend
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 80
       targetPort: http-standard
-      nodePort: 30008
   selector:
     role: frontend
     app: web-apache-php
+---
+#ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simplewebdb
+  namespace: lab
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: simplewebdb.lab
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: simple-web
+                port:
+                  number: 80

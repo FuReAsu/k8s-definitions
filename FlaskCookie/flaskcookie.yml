@@ -1,0 +1,48 @@
+#flask-cookie deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-cookie
+  namespace: lab
+  labels:
+    app: flask
+    function: cookies
+spec:
+  selector:
+    matchLabels:
+      app: flask
+      function: cookies
+  revisionHistoryLimit: 3
+  replicas: 3
+  template:
+    metadata:
+      name: flask-cookie
+      namespace: lab
+      labels:
+        app: flask
+        function: cookies
+    spec:
+      containers:
+        - name: flask-cookie
+          image: fureasu346/flask:cookie
+          ports:
+            - containerPort: 8765
+              protocol: TCP
+---
+#Load Balancer Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-cookie
+  namespace: lab
+  labels:
+    app: flask
+spec:
+  selector:
+    app: flask
+    function: cookies
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8765
+  type: LoadBalancer

@@ -1,24 +1,28 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: test-ingress
+  name: web-blue-green
   namespace: lab
 spec:
   ingressClassName: nginx
   rules:
-    - http:
+    - host: blue.lab
+      http:
         paths:
-          - path: /blue
-            pathType: Exact
+          - path: /
+            pathType: Prefix
             backend:
               service:
                 name: web-blue
                 port:
                   number: 80
-          - path: /green
-            pathType: Exact
+    - host: green.lab
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
             backend:
               service:
-                name: web-green
+                name: web-green 
                 port:
                   number: 80

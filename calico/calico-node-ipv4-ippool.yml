@@ -1,0 +1,44 @@
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: k8s-m1.ipv4-ippool
+spec:
+  allowedUses:
+  - Workload
+  - Tunnel
+  cidr: 172.16.0.0/24
+  blockSize: 24
+  ipipMode: Always
+  natOutgoing: true
+  nodeSelector: "kubernetes.io/hostname == 'k8s-m1'"
+  vxlanMode: Never
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: k8s-w1.ipv4-ippool
+spec:
+  allowedUses:
+  - Workload
+  - Tunnel
+  cidr: 172.16.1.0/24
+  blockSize: 24
+  ipipMode: Always
+  natOutgoing: true
+  nodeSelector: "kubernetes.io/hostname == 'k8s-w1'"
+  vxlanMode: Never
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: k8s-w2.ipv4-ippool
+spec:
+  allowedUses:
+  - Workload
+  - Tunnel
+  cidr: 172.16.2.0/24
+  blockSize: 24
+  ipipMode: Always
+  natOutgoing: true
+  nodeSelector: "kubernetes.io/hostname == 'k8s-w2'"
+  vxlanMode: Never
