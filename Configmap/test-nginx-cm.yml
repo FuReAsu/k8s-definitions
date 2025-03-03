@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-nginx
+  namespace: lab
+  labels:
+    apps: test-nginx
+data:
+  index: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST WEB SVR</title>
+    <style>
+        body {
+            background-color: yellow;
+            color: white;
+            text-align: center;
+            font-size: 30px;
+            font-family:'Times New Roman', Times, serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            margin: 0;
+        }
+        .header {
+            margin-top: 20px;
+        }
+        .footer {
+            margin-bottom: 20px;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>NGINX TEST WEB SERVER!</h1>
+            <p>webserver hosted on nginx container</p>
+            <p>You have reached <?php $host=$_SERVER['HTTP_HOST']; echo $host; ?> </p>
+            <p>The server is hosted at: <strong><?php echo gethostname(); ?></strong></p>
+        </div>
+    </body>
+    </html>
+  conf: |
+    user www-data;
+    worker_processes auto;
+    pid /run/nginx.pid;
+    error_log /var/log/nginx/error.log;
+    error_log /dev/stderr;
+    include /etc/nginx/modules-enabled/*.conf;
+
+    events {
+            worker_connections 1024;
+            # multi_accept on;
+    }
+
+    http {
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" "$host" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for" "$http_x_real_ip"';
+
+        access_log /var/log/nginx/access.log main;
+        access_log /dev/stdout main;
+        server {
+            listen 8000 default_server;
+
+            root /var/www/html;
+            
+            index index.html index.htm index.nginx-debian.html index.php;
+
+            server_name _; #hostname or IP
+
+            location / {
+                    try_files $uri $uri/ =404;
+            }
+            location ~ \.php$ {
+                    include snippets/fastcgi-php.conf;
+                    fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+                    include fastcgi_params;
+            }
+        }
+
+    }

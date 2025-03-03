@@ -1,0 +1,71 @@
+#Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: flask-rw
+  namespace: lab
+  labels:
+    app: flask-rw
+spec:
+  selector:
+    matchLabels:
+      app: flask-rw
+  revisionHistoryLimit: 3
+  replicas: 2
+  template:
+    metadata:
+      name: flask-rw
+      namespace: lab
+      labels:
+        app: flask-rw
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: flask-rw
+      containers:
+        - name: flask-rw
+          image: fureasu346/flask:rw
+          ports:
+            - containerPort: 8765
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+---
+#ClusterIP Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-rw
+  namespace: lab
+  labels:
+    app: flask-rw
+spec:
+  selector:
+    app: flask-rw
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8765
+  type: ClusterIP
+---
+#Ingress 
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flask-rw
+  namespace: lab
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: flaskrw.lab
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: flask-rw
+                port:
+                  number: 80

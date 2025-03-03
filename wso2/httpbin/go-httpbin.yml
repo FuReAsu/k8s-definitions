@@ -1,0 +1,63 @@
+#httpbin deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+  namespace: lab
+  labels:
+    app: httpbin
+spec:
+  selector:
+    matchLabels:
+      app: httpbin
+  replicas: 2
+  template:
+    metadata:
+      name: httpbin
+      namespace: lab
+      labels:
+        app: httpbin
+    spec:
+      containers:
+        - name: httpbin
+          image: mccutchen/go-httpbin:v2.2.0
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+---
+#ClusterIP Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  namespace: lab
+  labels: 
+    app: httpbin
+spec:
+  selector:
+    app: httpbin
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+---
+#Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpbin
+  namespace: lab
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: httpbin.lab
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: httpbin
+                port:
+                  number: 8080

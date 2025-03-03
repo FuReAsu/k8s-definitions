@@ -1,0 +1,53 @@
+#database deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wso2am-postgres
+  namespace: wso2
+  labels:
+    app: wso2am
+    type: database
+spec:
+  selector:
+    matchLabels:
+      app: wso2am
+      type: database
+  template:
+    metadata:
+      name: wso2am-postgres
+      namespace: wso2
+      labels:
+        app: wso2am
+        type: database
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: wso2am-data
+      containers:
+        - name: wso2am-postgres
+          image: registry.intsmm.net/wso2/wso2am-postgres:17-alpine
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data  
+---
+#DB Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: wso2am-postgres
+  namespace: wso2
+  labels:
+    app: wso2am
+    type: database
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    app: wso2am
+    type: database

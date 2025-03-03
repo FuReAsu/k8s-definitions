@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: flask-rw
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: 172.20.0.3
+  share: /exports/flask-rw
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - nfsvers=4.1

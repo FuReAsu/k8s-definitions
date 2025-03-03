@@ -1,0 +1,157 @@
+#wso2am single node deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wso2am
+  namespace: wso2
+  labels:
+    app: wso2am
+    type: single-node
+spec:
+  selector:
+    matchLabels:
+      app: wso2am
+      type: single-node
+  template:
+    metadata:
+      name: wso2am
+      namespace: wso2
+      labels:
+        app: wso2am
+        type: single-node
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: wso2am
+            items:
+              - key: deployment
+                path: deployment.toml
+      containers:
+        - name: wso2am
+          image: registry.intsmm.net/wso2/wso2am:4.4.0-rocky
+          ports:
+            - name: api-gw-http
+              containerPort: 8280
+              protocol: TCP
+            - name: api-gw-https
+              containerPort: 8243
+              protocol: TCP
+            - name: ws-http
+              containerPort: 9099
+              protocol: TCP
+            - name: ws-https
+              containerPort: 8099
+              protocol: TCP
+            - name: management
+              containerPort: 9443
+              protocol: TCP
+            - name: tm-throttling
+              containerPort: 11111
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /home/wso2carbon/wso2am-4.4.0/repository/conf/deployment.toml
+              subPath: deployment.toml
+---
+#APIMGW Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: wso2am
+  namespace: wso2
+  labels:
+    app: wso2am
+    type: single-node
+spec:
+  selector:
+    app: wso2am
+    type: single-node
+  ports:
+    - name: management
+      port: 9443
+      targetPort: 9443
+      protocol: TCP
+    - name: api-gw-http
+      port: 8280
+      targetPort: 8280
+      protocol: TCP
+    - name: api-gw-https
+      port: 8243
+      targetPort: 8243
+      protocol: TCP
+    - name: ws-http
+      port: 9099
+      targetPort: 9099
+      protocol: TCP
+    - name: ws-https
+      port: 8099
+      targetPort: 8099
+      protocol: TCP
+---
+#APIM Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apim
+  namespace: wso2
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "INGRESS_NGINX"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - apim.intsmm.net
+    secretName: apim-tls
+  rules:
+  - host: apim.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wso2am
+            port:
+              number: 9443
+---
+#APIGW Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apigw
+  namespace: wso2
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "INGRESS_NGINX"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - apigw.intsmm.net
+    secretName: apigw-tls
+  rules:
+  - host: apigw.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wso2am
+            port:
+              number: 8243
+  - host: apigw.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wso2am
+            port:
+              number: 8280
