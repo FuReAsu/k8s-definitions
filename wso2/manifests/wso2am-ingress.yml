@@ -1,0 +1,66 @@
+#APIM Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apim
+  namespace: wso2
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "INGRESS_NGINX"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - apim.intsmm.net
+    secretName: apim-tls
+  rules:
+  - host: apim.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wso2am
+            port:
+              number: 9443
+---
+#APIGW Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apigw
+  namespace: wso2
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "INGRESS_NGINX"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - apigw.intsmm.net
+    secretName: apigw-tls
+  rules:
+  - host: apigw.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wso2am
+            port:
+              number: 8243
+  - host: apigw.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wso2am
+            port:
+              number: 8280

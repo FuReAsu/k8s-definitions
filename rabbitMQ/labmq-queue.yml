@@ -1,0 +1,10 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata: 
+  name: testq
+  namespace: lab
+spec:
+  name: testq
+  rabbitmqClusterReference:
+    name: labmq
+    namespace: lab

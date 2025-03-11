@@ -299,3 +299,5 @@ data:
     
     [transport.https.properties]
     proxyPort = 443
+    [transport.http.properties]
+    proxyPort = 80

@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mycluster-sidecar-clusterrolebinding
+subjects:
+  - kind: ServiceAccount
+    name: mycluster-sidecar-sa
+    namespace: innodb
+roleRef:
+  kind: ClusterRole
+  name: mysql-sidecar
+  apiGroup: rbac.authorization.k8s.io

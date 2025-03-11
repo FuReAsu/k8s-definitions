@@ -20,13 +20,19 @@ spec:
         app: wso2am
         type: single-node
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - srv-k8s-w1
       volumes:
         - name: config
-          configMap:
-            name: wso2am
-            items:
-              - key: deployment
-                path: deployment.toml
+          secret:
+            secretName: wso2am-config
       containers:
         - name: wso2am
           image: registry.intsmm.net/wso2/wso2am:4.4.0-rocky
@@ -53,6 +59,7 @@ spec:
             - name: config
               mountPath: /home/wso2carbon/wso2am-4.4.0/repository/conf/deployment.toml
               subPath: deployment.toml
+              readOnly: true
 ---
 #APIMGW Service
 apiVersion: v1

@@ -1,0 +1,16 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+    name: labmq
+    namespace: lab
+spec:
+    replicas: 2
+    service:
+      type: LoadBalancer
+    persistence:
+      storageClassName: rabbitmq
+      storage: 2Gi
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi 
