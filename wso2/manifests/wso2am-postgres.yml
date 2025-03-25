@@ -33,21 +33,3 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data  
----
-#DB Service
-apiVersion: v1
-kind: Service
-metadata:
-  name: wso2am-postgres
-  namespace: wso2
-  labels:
-    app: wso2am
-    type: database
-spec:
-  ports:
-    - port: 5432
-      targetPort: 5432
-      protocol: TCP
-  selector:
-    app: wso2am
-    type: database

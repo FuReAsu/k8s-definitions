@@ -1,0 +1,23 @@
+#GW Internal Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: gw-api-internal
+  namespace: wso2
+  labels:
+    app: wso2am
+    type: gateway-internal
+spec:
+  selector:
+    app: wso2am
+    type: single-node
+  ports:
+    - name: api-gw-http
+      port: 80
+      targetPort: 8280
+      protocol: TCP
+    - name: api-gw-https
+      port: 443
+      targetPort: 8243
+      protocol: TCP
+  sessionAffinity: ClientIP

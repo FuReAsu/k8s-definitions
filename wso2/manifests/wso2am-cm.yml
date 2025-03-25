@@ -8,20 +8,20 @@ metadata:
 data:
   deployment: |
     [server]
-    hostname = "apim.intsmm.net"
+    hostname = "mgr.api.intsmm.net"
     #offset=0
     base_path = "${carbon.protocol}://${carbon.host}:${carbon.management.port}"
     #discard_empty_caches = false
     server_role = "default"
-
+    
     [super_admin]
     username = "admin"
     password = "wso2password2025"
     create_admin_account = true
-
+    
     [user_store]
     type = "database_unique_id"
-
+    
     [database.apim_db]
     type = "postgre"
     url = "jdbc:postgresql://wso2am-postgres:5432/apim_db"
@@ -29,7 +29,7 @@ data:
     username = "apimadmin"
     password = "P@ssw0rd"
     validationQuery= "SELECT 1"
-
+    
     [database.shared_db]
     type = "postgre"
     url = "jdbc:postgresql://wso2am-postgres:5432/shared_db"
@@ -37,31 +37,31 @@ data:
     username = "apimadmin"
     password = "P@ssw0rd"
     validationQuery= "SELECT 1"
-
+    
     [keystore.tls]
     file_name =  "wso2carbon.jks"
     type =  "JKS"
     password =  "wso2carbon"
     alias =  "wso2carbon"
     key_password =  "wso2carbon"
-
+    
     #[keystore.listener_profile]
     #bind_address = "0.0.0.0"
-
+    
     #[keystore.primary]
     #file_name =  "wso2carbon.jks"
     #type =  "JKS"
     #password =  "wso2carbon"
     #alias =  "wso2carbon"
     #key_password =  "wso2carbon"
-
+    
     #[keystore.internal]
     #file_name =  "wso2carbon.jks"
     #type =  "JKS"
     #password =  "wso2carbon"
     #alias =  "wso2carbon"
     #key_password =  "wso2carbon"
-
+    
     [[apim.gateway.environment]]
     name = "Default"
     type = "hybrid"
@@ -73,52 +73,52 @@ data:
     service_url = "https://localhost:${mgt.transport.https.port}/services/"
     username= "${admin.username}"
     password= "${admin.password}"
-    ws_endpoint = "ws://ws.intsmm.net"
-    wss_endpoint = "wss://ws.intsmm.net"
-    http_endpoint = "http://apigw.intsmm.net"
-    https_endpoint = "https://apigw.intsmm.net"
+    ws_endpoint = "ws://ws.api.intsmm.net"
+    wss_endpoint = "wss://ws.api.intsmm.net"
+    http_endpoint = "http://gw.api.intsmm.net"
+    https_endpoint = "https://gw.api.intsmm.net"
     websub_event_receiver_http_endpoint = "http://apigw.intsmm.net:9021"
     websub_event_receiver_https_endpoint = "https://apigw.intsmm.net:8021"
-
+    
     [apim.sync_runtime_artifacts.gateway]
     gateway_labels =["Default"]
-
+    
     #[apim.cache.gateway_token]
     #enable = true
     #expiry_time = "900s"
-
+    
     #[apim.cache.resource]
     #enable = true
     #expiry_time = "900s"
-
+    
     #[apim.cache.km_token]
     #enable = false
     #expiry_time = "15m"
-
+    
     #[apim.cache.recent_apis]
     #enable = false
-
+    
     #[apim.cache.scopes]
     #enable = true
-
+    
     #[apim.cache.publisher_roles]
     #enable = true
-
+    
     #[apim.cache.jwt_claim]
     #enable = true
     #expiry_time = "15m"
-
+    
     #[apim.cache.tags]
     #expiry_time = "2m"
-
+    
     [apim.analytics]
     enable = false
     auth_token = ""
-
+    
     [apim.ai]
     enable = true
     token = ""
-
+    
     [apim.key_manager]
     enable_lightweight_apikey_generation = true
     #service_url = "https://localhost:${mgt.transport.https.port}/services/"
@@ -129,13 +129,13 @@ data:
     #key_validation_handler_type = "default"
     #key_validation_handler_type = "custom"
     #key_validation_handler_impl = "org.wso2.carbon.apimgt.keymgt.handlers.DefaultKeyValidationHandler"
-
+    
     [apim.idp]
     server_url = "https://localhost:9443"
-    authorize_endpoint = "https://apim.intsmm.net/oauth2/authorize"
-    oidc_logout_endpoint = "https://apim.intsmm.net/oidc/logout"
+    authorize_endpoint = "https://mgr.api.intsmm.net/oauth2/authorize"
+    oidc_logout_endpoint = "https://mgr.api.intsmm.net/oidc/logout"
     oidc_check_session_endpoint = "https://localhost:9443/oidc/checksession"
-
+    
     #[apim.jwt]
     #enable = true
     #encoding = "base64" # base64,base64url
@@ -147,14 +147,14 @@ data:
     #enable_user_claims = true
     #claims_extractor_impl = "org.wso2.carbon.apimgt.impl.token.ExtendedDefaultClaimsRetriever"
     #use_sha256_hash = false
-
+    
     #[apim.oauth_config]
     #enable_outbound_auth_header = false
     #auth_header = "Authorization"
     #revoke_endpoint = "https://localhost:${https.nio.port}/revoke"
     #enable_token_encryption = false
     #enable_token_hashing = false
-
+    
     #[apim.devportal]
     #url = "https://localhost:${mgt.transport.https.port}/devportal"
     #enable_application_sharing = false
@@ -169,48 +169,48 @@ data:
     #enable_anonymous_mode=true
     #enable_cross_tenant_subscriptions = true
     #default_reserved_username = "apim_reserved_user"
-
+    
     #[apim.publisher]
     #enable_portal_configuration_only_mode = false
-
+    
     [apim.cors]
     allow_origins = "*"
     allow_methods = ["GET","PUT","POST","DELETE","PATCH","OPTIONS"]
     allow_headers = ["authorization","Access-Control-Allow-Origin","Content-Type","SOAPAction","apikey","Internal-Key"]
     allow_credentials = false
-
+    
     #[apim.throttling]
     #enable_data_publishing = true
     #enable_policy_deploy = true
     #enable_blacklist_condition = true
     #enable_persistence = true
     #throttle_decision_endpoints = ["tcp://localhost:5672","tcp://localhost:5672"]
-
+    
     #[apim.throttling.blacklist_condition]
     #start_delay = "5m"
     #period = "1h"
-
+    
     #[apim.throttling.jms]
     #start_delay = "5m"
-
+    
     #[apim.throttling.event_sync]
     #hostName = "0.0.0.0"
     #port = 11224
-
+    
     #[apim.throttling.event_management]
     #hostName = "0.0.0.0"
     #port = 10005
-
+    
     #[[apim.throttling.url_group]]
     #traffic_manager_urls = ["tcp://localhost:9611","tcp://localhost:9611"]
     #traffic_manager_auth_urls = ["ssl://localhost:9711","ssl://localhost:9711"]
     #type = "loadbalance"
-
+    
     #[[apim.throttling.url_group]]
     #traffic_manager_urls = ["tcp://localhost:9611","tcp://localhost:9611"]
     #traffic_manager_auth_urls = ["ssl://localhost:9711","ssl://localhost:9711"]
     #type = "failover"
-
+    
     #[apim.workflow]
     #enable = false
     #service_url = "https://localhost:9445/bpmn"
@@ -221,7 +221,7 @@ data:
     #client_registration_endpoint = "https://localhost:${mgt.transport.https.port}/client-registration/v0.17/register"
     #client_registration_username = "$ref{super_admin.username}"
     #client_registration_password = "$ref{super_admin.password}"
-
+    
     #data bridge config
     #[transport.receiver]
     #type = "binary"
@@ -235,7 +235,7 @@ data:
     #tcp_receiver_thread_pool_size = 100
     #ssl_enabled_protocols = ["TLSv1","TLSv1.1","TLSv1.2"]
     #ciphers = ["SSL_RSA_WITH_RC4_128_MD5","SSL_RSA_WITH_RC4_128_SHA"]
-
+    
     #[apim.notification]
     #from_address = "APIM.com"
     #username = "APIM"
@@ -244,7 +244,7 @@ data:
     #port = 3025
     #enable_start_tls = false
     #enable_authentication = true
-
+    
     #[apim.token.revocation]
     #notifier_impl = "org.wso2.carbon.apimgt.notification.TokenRevocationNotifierImpl"
     #enable_realtime_notifier = true
@@ -254,17 +254,17 @@ data:
     #persistent_notifier.ttl = 5000
     #persistent_notifier.username = "root"
     #persistent_notifier.password = "root"
-
+    
     [[event_handler]]
     name="userPostSelfRegistration"
     subscriptions=["POST_ADD_USER"]
-
+    
     [service_provider]
     sp_name_regex = "^[\\sa-zA-Z0-9._-]*$"
-
+    
     [database.local]
     url = "jdbc:h2:./repository/database/WSO2CARBON_DB;DB_CLOSE_ON_EXIT=FALSE"
-
+    
     [[event_listener]]
     id = "token_revocation"
     type = "org.wso2.carbon.identity.core.handler.AbstractIdentityHandler"
@@ -275,12 +275,12 @@ data:
     username = "${admin.username}"
     password = "${admin.password}"
     'header.X-WSO2-KEY-MANAGER' = "default"
-
+    
     [oauth.grant_type.token_exchange]
     enable = true
     allow_refresh_tokens = true
     iat_validity_period = "1h"
-
+    
     #[apim.transaction_counter]
     #enable = true
     #server_id = "Gateway1"
@@ -296,8 +296,5 @@ data:
     #service_url = "https://localhost:8080/transactions/records"
     #service_username = "admin"
     #service_password = "admin"
-    
     [transport.https.properties]
     proxyPort = 443
-    [transport.http.properties]
-    proxyPort = 80

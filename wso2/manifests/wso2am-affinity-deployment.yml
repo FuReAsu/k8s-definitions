@@ -60,38 +60,3 @@ spec:
               mountPath: /home/wso2carbon/wso2am-4.4.0/repository/conf/deployment.toml
               subPath: deployment.toml
               readOnly: true
----
-#APIMGW Service
-apiVersion: v1
-kind: Service
-metadata:
-  name: wso2am
-  namespace: wso2
-  labels:
-    app: wso2am
-    type: single-node
-spec:
-  selector:
-    app: wso2am
-    type: single-node
-  ports:
-    - name: management
-      port: 9443
-      targetPort: 9443
-      protocol: TCP
-    - name: api-gw-http
-      port: 8280
-      targetPort: 8280
-      protocol: TCP
-    - name: api-gw-https
-      port: 8243
-      targetPort: 8243
-      protocol: TCP
-    - name: ws-http
-      port: 9099
-      targetPort: 9099
-      protocol: TCP
-    - name: ws-https
-      port: 8099
-      targetPort: 8099
-      protocol: TCP

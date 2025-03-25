@@ -1,0 +1,64 @@
+#MGR Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mgr-api
+  namespace: wso2
+  labels:
+    app: wso2am
+    type: manager
+spec:
+  selector:
+    app: wso2am
+    type: single-node
+  ports:
+    - name: management
+      port: 443
+      targetPort: 9443
+      protocol: TCP
+---
+#GW Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: gw-api
+  namespace: wso2
+  labels:
+    app: wso2am
+    type: gateway
+spec:
+  selector:
+    app: wso2am
+    type: single-node
+  ports:
+    - name: api-gw-http
+      port: 80
+      targetPort: 8280
+      protocol: TCP
+    - name: api-gw-https
+      port: 443
+      targetPort: 8243
+      protocol: TCP
+---
+#WS Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: ws-api
+  namespace: wso2
+  labels:
+    app: wso2am
+    type: websocket
+spec:
+  selector:
+    app: wso2am
+    type: single-node
+  ports:
+    - name: api-ws-http
+      port: 80
+      targetPort: 9099
+      protocol: TCP
+    - name: api-ws-https
+      port: 443
+      targetPort: 8099
+      protocol: TCP

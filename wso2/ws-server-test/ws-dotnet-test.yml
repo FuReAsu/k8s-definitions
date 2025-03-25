@@ -1,0 +1,42 @@
+#ws-dotnet deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ws-dotnet
+  namespace: lab
+  labels:
+    app: ws-server
+spec:
+  selector:
+    matchLabels:
+      app: ws-server
+  replicas: 1
+  template:
+    metadata:
+      name: ws-dotnet
+      namespace: lab
+      labels:
+        app: ws-server
+    spec:
+      containers:
+        - name: ws-dotnet
+          image: fureasu346/ws-dotnet:v1
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+---
+#ClusterIP Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: ws-dotnet
+  namespace: lab
+  labels: 
+    app: ws-sersver
+spec:
+  selector:
+    app: ws-server
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000

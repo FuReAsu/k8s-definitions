@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: apim
+  name: mgr-api
   namespace: wso2
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -12,25 +12,25 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - apim.intsmm.net
-    secretName: apim-tls
+    - mgr.api.intsmm.net
+    secretName: mgr-api-tls
   rules:
-  - host: apim.intsmm.net
+  - host: mgr.api.intsmm.net
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: wso2am
+            name: mgr-api
             port:
-              number: 9443
+              number: 443
 ---
 #APIGW Ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: apigw
+  name: gw-api
   namespace: wso2
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -41,26 +41,65 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - apigw.intsmm.net
-    secretName: apigw-tls
+    - gw.api.intsmm.net
+    secretName: gw-api-tls
   rules:
-  - host: apigw.intsmm.net
+  - host: gw.api.intsmm.net
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: wso2am
+            name: gw-api
             port:
-              number: 8243
-  - host: apigw.intsmm.net
+              number: 443
+  - host: gw.api.intsmm.net
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: wso2am
+            name: gw-api
             port:
-              number: 8280
+              number: 80
+---
+#WebSocket API Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ws-api
+  namespace: wso2
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "INGRESS_NGINX"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - ws.api.intsmm.net
+    secretName: ws-api-tls
+  rules:
+  - host: ws.api.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ws-api
+            port:
+              number: 443
+  - host: ws.api.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ws-api
+            port:
+              number: 80
