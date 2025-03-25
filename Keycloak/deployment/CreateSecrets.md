@@ -9,5 +9,6 @@ kubectl create secret tls kc-dev-tls --cert tls/kc.crt --key tls/kc.key -n keycl
 ```bash
 kubectl create secret generic keycloak-db-credentials \
   --from-literal=username=keycloak \
-  --from-literal=password=keycloakP@ssw0rd2025
+  --from-literal=password=keycloakP@ssw0rd2025 \
+  -n keycloak
 ```

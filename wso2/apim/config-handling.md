@@ -10,7 +10,7 @@ There's a manifest for it in the manifests
 ## Storing it as secret ##
 
 ```bash
-kubectl create secret tls mgr-api-tls --cert=mgr.api.crt --key=mgr.api.key
-kubectl create secret tls gw-api-tls --cert=gw.api.crt --key=gw.api.key
-kubectl create secret tls ws-api-tls --cert=ws.api.crt --key=ws.api.key
+kubectl create secret tls mgr-api-tls --cert=mgr.api.crt --key=mgr.api.key -n wso2
+kubectl create secret tls gw-api-tls --cert=gw.api.crt --key=gw.api.key -n wso2
+kubectl create secret tls ws-api-tls --cert=ws.api.crt --key=ws.api.key -n wso2
 ```
