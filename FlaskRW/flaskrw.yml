@@ -10,7 +10,7 @@ spec:
     matchLabels:
       app: flask-rw
   revisionHistoryLimit: 3
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       name: flask-rw
@@ -54,10 +54,16 @@ metadata:
   name: flask-rw
   annotations:
     alb.ingress.kubernetes.io/scheme: "internet-facing"
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/target-type: 'ip'
+    alb.ingress.kubernetes.io/load-balancer-name: "flaskrw-eks-intsmm-net"
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-southeast-1:730335496277:certificate/9f66c8c9-a48d-423e-8765-af4f032fdaf5"
+    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600"
 spec:
   ingressClassName: alb
+  tls:
+  - hosts:
+    - flaskrw.eks.intsmm.net
   rules:
     - host: flaskrw.eks.intsmm.net
       http:

@@ -9,8 +9,11 @@ spec:
       type: LoadBalancer
     persistence:
       storageClassName: rabbitmq
-      storage: 2Gi
+      storage: 1G
     resources:
+      requests:
+        cpu: 500m
+        memory: 500Mi
       limits:
         cpu: 1000m
         memory: 1Gi 

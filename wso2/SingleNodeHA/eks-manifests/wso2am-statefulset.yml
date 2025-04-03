@@ -41,6 +41,13 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 15
             failureThreshold: 5
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 1Gi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
           ports:
             - name: api-gw-http
               containerPort: 8280

@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kc-dev-ingress
+  namespace: keycloak
+  annotations:
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/target-type: 'ip'
+    alb.ingress.kubernetes.io/load-balancer-name: "kc-dev-eks-intsmm-net"
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-southeast-1:730335496277:certificate/b7c03a6c-5d18-43d4-a514-28d833fc77ae"
+    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600"
+    alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  ingressClassName: alb
+  tls:
+  - hosts:
+    - kc-dev.eks.intsmm.net
+  rules:
+  - host: kc-dev.eks.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kc-dev-service
+            port:
+              number: 8443

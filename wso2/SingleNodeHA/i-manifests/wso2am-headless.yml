@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wso2am-cluster
+  namespace: wso2
+  labels:
+    app: wso2am
+spec:
+  ports:
+    - port: 5672
+      name: amqp
+    - port: 9611
+      name: tm
+    - port: 9711
+      name: tm-auth
+  clusterIP: None
+  selector:
+    app: wso2am
