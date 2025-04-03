@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: wso2am
+  namespace: wso2
+  labels:
+    app: wso2am
+spec:
+  serviceName: "wso2am-cluster"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wso2am
+  template:
+    metadata:
+      labels:
+        app: wso2am
+    spec:
+      volumes:
+        - name: init-config
+          secret:
+            secretName: wso2am-config
+      containers:
+        - name: wso2am
+          image: registry.intsmm.net/wso2/wso2am:4.4.0-rocky
+          volumeMounts:
+            - name: config
+              mountPath: /home/wso2carbon/wso2am-4.4.0/repository/conf
+            - name: log
+              mountPath: /home/wso2carbon/wso2am-4.4.0/repository/logs
+          livenessProbe:
+            httpGet:
+              path: /services/Version
+              port: 9763
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 3
+          startupProbe:
+            tcpSocket:
+              port: 9443
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            failureThreshold: 5
+          ports:
+            - name: api-gw-http
+              containerPort: 8280
+              protocol: TCP
+            - name: api-gw-https
+              containerPort: 8243
+              protocol: TCP
+            - name: ws-http
+              containerPort: 9099
+              protocol: TCP
+            - name: ws-https
+              containerPort: 8099
+              protocol: TCP
+            - name: management
+              containerPort: 9443
+              protocol: TCP
+            - name: websub-http
+              containerPort: 9021
+              protocol: TCP
+            - name: websub-https
+              containerPort: 8021
+              protocol: TCP
+            - name: servlet
+              containerPort: 9763
+              protocol: TCP
+            - name: amqp
+              containerPort: 5672
+              protocol: TCP
+            - name: tm
+              containerPort: 9611
+              protocol: TCP
+            - name: tm-auth
+              containerPort: 9711
+              protocol: TCP
+            - name: rmi-reg
+              containerPort: 11111
+              protocol: TCP
+            - name: rmi-srv
+              containerPort: 9999
+              protocol: TCP
+      initContainers:
+        - name: init-config
+          image: registry.intsmm.net/wso2/wso2am:4.4.0-rocky
+          volumeMounts:
+            - name: init-config
+              mountPath: /temp/init-config
+              readOnly: true  
+            - name: config
+              mountPath: /temp/config/
+            - name: log
+              mountPath: /temp/log/
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          command: ["/bin/bash", "-c"]
+          args:
+            - | 
+              cp -r /home/wso2carbon/wso2am-4.4.0/repository/conf/* /temp/config && chown -R wso2carbon:wso2 /temp/config &&
+              chown -R wso2carbon:wso2 /temp/log &&
+              cp /temp/init-config/$POD_NAME /temp/config/deployment.toml
+  volumeClaimTemplates:
+        - metadata:
+            name: config
+            namespace: wso2
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 2Gi
+            storageClassName: wso2am
+        - metadata:
+            name: log
+            namespace: wso2
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 2Gi
+            storageClassName: wso2am 

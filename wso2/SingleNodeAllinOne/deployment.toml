@@ -102,13 +102,13 @@ gateway_labels =["Default"]
 #[apim.cache.tags]
 #expiry_time = "2m"
 
-[apim.analytics]
-enable = false
-auth_token = ""
+#[apim.analytics]
+#enable = false
+#auth_token = ""
 
-[apim.ai]
-enable = true
-token = ""
+#[apim.ai]
+#enable = false
+#token = ""
 
 [apim.key_manager]
 enable_lightweight_apikey_generation = true
@@ -122,10 +122,10 @@ enable_lightweight_apikey_generation = true
 #key_validation_handler_impl = "org.wso2.carbon.apimgt.keymgt.handlers.DefaultKeyValidationHandler"
 
 [apim.idp]
-server_url = "https://localhost:9443"
+server_url = "https://mgr.api.intsmm.net"
 authorize_endpoint = "https://mgr.api.intsmm.net/oauth2/authorize"
 oidc_logout_endpoint = "https://mgr.api.intsmm.net/oidc/logout"
-oidc_check_session_endpoint = "https://localhost:9443/oidc/checksession"
+oidc_check_session_endpoint = "https://mgr.api.intsmm.net/oidc/checksession"
 
 #[apim.jwt]
 #enable = true
@@ -287,5 +287,9 @@ iat_validity_period = "1h"
 #service_url = "https://localhost:8080/transactions/records"
 #service_username = "admin"
 #service_password = "admin"
+
 [transport.https.properties]
 proxyPort = 443
+
+[message_builder]
+json = "org.apache.synapse.commons.json.JsonStreamBuilder"

@@ -1,0 +1,131 @@
+#web server deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpleweb
+  namespace: lab
+spec:
+  selector:
+    matchLabels:
+      role: frontend
+      app: web-apache-php
+  revisionHistoryLimit: 5
+  replicas: 3
+  template:
+    metadata:
+      name: simpleweb
+      namespace: lab
+      labels:
+        role: frontend
+        app: web-apache-php
+    spec:
+      containers:
+        - name: simpleweb
+          image: fureasu346/simplewebdb_webapachephp:v1
+          env:
+          - name: DB_SERVERNAME
+            value: "simple-db"
+          - name: DB_NAME
+            value: "testdb"
+          - name: DB_USERNAME
+            value: "webserver"
+          - name: DB_PASSWORD
+            value: "webserverP@ssw0rd"
+          - name: WEBSITE_NAME
+            value: "simplewebdb.lab"
+          ports:
+            - name: http-standard
+              containerPort: 80
+              protocol: TCP
+---
+# database server deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpledb 
+  namespace: lab
+spec:
+  selector:
+    matchLabels:
+      role: backend
+      app: db-mysql
+  revisionHistoryLimit: 5
+  replicas: 3
+  template:
+    metadata:
+      name: simpledb
+      namespace: lab
+      labels:
+        role: backend
+        app: db-mysql
+    spec:
+      containers:
+        - name: simepledb
+          image: fureasu346/simplewebdb_dbmysql:v1
+          env:
+          - name: MYSQL_ROOTPASSWORD
+            value: "mysqlP@ssw0rd"
+          - name: MYSQL_USERNAME
+            value: "webserver"
+          - name: MYSQL_USER_PASSWORD
+            value: "webserverP@ssw0rd"
+          - name: MYSQL_REMOTE_HOST
+            value: "%"
+          ports:
+            - name: mysql-standard
+              containerPort: 3306
+              protocol: TCP
+---
+#database service
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-db
+  namespace: lab
+  labels:
+    role: backend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306 
+      targetPort: mysql-standard
+  selector:
+    role: backend
+    app: db-mysql
+---
+#web service
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-web
+  namespace: lab 
+  labels:
+    role: frontend
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: http-standard
+  selector:
+    role: frontend
+    app: web-apache-php
+---
+#ingress
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: simplewebdb
+#  namespace: lab
+#spec:
+#  ingressClassName: nginx
+#  rules:
+#    - host: simplewebdb.lab
+#      http:
+#        paths:
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: simple-web
+#                port:
+#                  number: 80

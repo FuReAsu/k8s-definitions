@@ -7,7 +7,7 @@ kubectl create secret tls kc-dev-tls --cert tls/kc.crt --key tls/kc.key -n keycl
 ## Create DB Username and Password for Keycloak ##
 
 ```bash
-kubectl create secret generic keycloak-db-credentials \
+kubectl create secret generic kc-dev-db \
   --from-literal=username=keycloak \
   --from-literal=password=keycloakP@ssw0rd2025 \
   -n keycloak

@@ -1,0 +1,29 @@
+#Service for web-blue
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-blue
+  namespace: lab
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: nginx
+    color: blue
+---
+#Service for web-green
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-green
+  namespace: lab
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: nginx
+    color: green

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kc-dev-mysql
+  namespace: keycloak
+  labels:
+    app: kc-dev-mysql
+spec:
+  selector:
+    matchLabels:
+      app: kc-dev-mysql
+  template:
+    metadata:
+      name: kc-dev-mysql
+      namespace: keycloak
+      labels:
+        app: kc-dev-mysql
+    spec:
+      containers:
+        - name: kc-dev-mysql
+          image: docker.io/mysql:9.2.0
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kc-dev-mysql-root
+                  key: root-password
+            - name: MYSQL_DATABASE
+              value: keycloak
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: kc-dev-db
+                  key: username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kc-dev-db
+                  key: password
+---
+#DB Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: kc-dev-mysql
+  namespace: keycloak
+  labels:
+    app: kc-dev-mysql
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+      protocol: TCP
+  selector:
+    app: kc-dev-mysql
+  type: LoadBalancer

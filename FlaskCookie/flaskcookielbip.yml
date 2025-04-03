@@ -1,0 +1,52 @@
+#flask-cookie deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-cookie
+  namespace: lab
+  labels:
+    app: flask
+    function: cookies
+spec:
+  selector:
+    matchLabels:
+      app: flask
+      function: cookies
+  revisionHistoryLimit: 3
+  replicas: 3
+  template:
+    metadata:
+      name: flask-cookie
+      namespace: lab
+      labels:
+        app: flask
+        function: cookies
+    spec:
+      containers:
+        - name: flask-cookie
+          image: fureasu346/flask:cookie
+          ports:
+            - containerPort: 8765
+              protocol: TCP
+---
+#Load Balancer Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-cookie
+  namespace: lab
+  labels:
+    app: flask
+  annotations: 
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb-ip"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+    service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "eipalloc-04a064ac19d59ee41,eipalloc-04d06e83108305e96,eipalloc-0df4809ba3686553b"
+spec:
+  selector:
+    app: flask
+    function: cookies
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8765
+  type: LoadBalancer

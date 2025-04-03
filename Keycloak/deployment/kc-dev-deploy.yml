@@ -1,0 +1,29 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: kc-dev
+  namespace: keycloak
+spec:
+  instances: 2
+  db:
+    vendor: mysql
+    host: innodb.innodb
+    usernameSecret:
+      name: kc-dev-db
+      key: username
+    passwordSecret:
+      name: kc-dev-db
+      key: password
+  http:
+    tlsSecret: kc-dev-tls
+  hostname:
+    hostname: kc-dev.k8s.intsmm.net
+  proxy:
+    headers: xforwarded
+  ingress:
+    enabled: false
+  additionalOptions:
+    - name: proxy
+      value: reencrypt
+    - name: http-enabled
+      value: "true"

@@ -184,6 +184,18 @@ spec:
       volumes:
       - emptyDir: {}
         name: tmp-dir
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - srv-k8s-m1
 ---
 apiVersion: apiregistration.k8s.io/v1
 kind: APIService

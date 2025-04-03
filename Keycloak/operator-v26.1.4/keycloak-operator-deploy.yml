@@ -11,7 +11,6 @@ metadata:
     app.kubernetes.io/version: 26.1.4
     app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
-  namespace: keycloak
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -213,7 +212,6 @@ metadata:
   labels:
     app.kubernetes.io/name: keycloak-operator
   name: keycloak-operator-role-binding
-  namespace: keycloak
 roleRef:
   kind: Role
   apiGroup: rbac.authorization.k8s.io
@@ -226,7 +224,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: keycloakrealmimportcontroller-role-binding
-  namespace: keycloak
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
@@ -239,7 +236,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: keycloakcontroller-role-binding
-  namespace: keycloak
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
@@ -255,7 +251,6 @@ metadata:
     app.kubernetes.io/name: keycloak-operator
     app.kubernetes.io/version: 26.1.4
   name: keycloak-operator-view
-  namespace: keycloak
 roleRef:
   kind: ClusterRole
   apiGroup: rbac.authorization.k8s.io
@@ -276,7 +271,6 @@ metadata:
     app.kubernetes.io/version: 26.1.4
     app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
-  namespace: keycloak
 spec:
   ports:
     - name: http
@@ -299,7 +293,6 @@ metadata:
     app.kubernetes.io/version: 26.1.4
     app.kubernetes.io/managed-by: quarkus
   name: keycloak-operator
-  namespace: keycloak
 spec:
   replicas: 1
   selector:
