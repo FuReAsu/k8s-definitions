@@ -11,6 +11,8 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-southeast-1:730335496277:certificate/b7c03a6c-5d18-43d4-a514-28d833fc77ae"
     alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600"
     alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    alb.ingress.kubernetes.io/healthcheck-path: "/health/live"
+    alb.ingress.kubernetes.io/healthcheck-port: "9000"
 spec:
   ingressClassName: alb
   tls:

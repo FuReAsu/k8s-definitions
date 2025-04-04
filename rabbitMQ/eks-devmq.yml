@@ -14,7 +14,7 @@ spec:
         service.beta.kubernetes.io/aws-load-balancer-name: "dev-mq-eks-intsmm-net"
     persistence:
       storageClassName: gp2
-      storage: 1G
+      storage: 1Gi
     resources:
       requests:
         cpu: 500m

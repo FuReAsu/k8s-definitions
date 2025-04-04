@@ -40,24 +40,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  type: LoadBalancer
----
-#Ingress
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: httpbin
-  namespace: lab
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: httpbin.lab
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: httpbin
-                port:
-                  number: 8080
+  type: ClusterIP

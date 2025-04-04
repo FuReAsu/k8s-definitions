@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wso2am-data
+  namespace: wso2
+  labels:
+    app: wso2am-postgres
+spec:
+  storageClassName: gp3
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

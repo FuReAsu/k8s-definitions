@@ -22,12 +22,10 @@ spec:
             secretName: wso2am-config
       containers:
         - name: wso2am
-          image: registry.intsmm.net/wso2/wso2am:4.4.0-rocky
+          image: docker.io/fureasu346/wso2am:4.4.0-rocky-trust
           volumeMounts:
             - name: config
               mountPath: /home/wso2carbon/wso2am-4.4.0/repository/conf
-            - name: log
-              mountPath: /home/wso2carbon/wso2am-4.4.0/repository/logs
           livenessProbe:
             httpGet:
               path: /services/Version
@@ -90,15 +88,13 @@ spec:
               protocol: TCP
       initContainers:
         - name: init-config
-          image: registry.intsmm.net/wso2/wso2am:4.4.0-rocky
+          image: docker.io/fureasu346/wso2am:4.4.0-rocky
           volumeMounts:
             - name: init-config
               mountPath: /temp/init-config
               readOnly: true  
             - name: config
               mountPath: /temp/config/
-            - name: log
-              mountPath: /temp/log/
           env:
             - name: POD_NAME
               valueFrom:
@@ -111,7 +107,6 @@ spec:
           args:
             - | 
               cp -r /home/wso2carbon/wso2am-4.4.0/repository/conf/* /temp/config && chown -R wso2carbon:wso2 /temp/config &&
-              chown -R wso2carbon:wso2 /temp/log &&
               cp /temp/init-config/$POD_NAME /temp/config/deployment.toml
   volumeClaimTemplates:
         - metadata:
@@ -121,14 +116,5 @@ spec:
             accessModes: ["ReadWriteOnce"]
             resources:
               requests:
-                storage: 2Gi
-            storageClassName: wso2am
-        - metadata:
-            name: log
-            namespace: wso2
-          spec:
-            accessModes: ["ReadWriteOnce"]
-            resources:
-              requests:
-                storage: 2Gi
-            storageClassName: wso2am 
+                storage: 100Mi
+            storageClassName: gp2

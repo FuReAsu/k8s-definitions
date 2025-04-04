@@ -27,3 +27,5 @@ spec:
       value: reencrypt
     - name: http-enabled
       value: "true"
+    - name: metrics-enabled
+      value: "true"

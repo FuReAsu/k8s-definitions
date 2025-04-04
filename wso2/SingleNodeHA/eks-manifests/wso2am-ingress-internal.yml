@@ -1,0 +1,113 @@
+#APIM Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mgr-api-internal
+  namespace: wso2
+  annotations:
+    alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    alb.ingress.kubernetes.io/scheme: "internal"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/target-type: 'ip'
+    alb.ingress.kubernetes.io/load-balancer-name: "apim-eks-intsmm-net-internal"
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-southeast-1:730335496277:certificate/37010a71-8aca-40bc-8e44-051bd8079a38"
+    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600"
+spec:
+  ingressClassName: alb
+  tls:
+  - hosts:
+    - apim.eks.intsmm.net
+  rules:
+  - host: apim.eks.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mgr-api
+            port:
+              number: 443
+---
+#APIGW Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gw-api-internal
+  namespace: wso2
+  annotations:
+    alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    alb.ingress.kubernetes.io/scheme: "internal"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443},{"HTTP":80}]'
+    alb.ingress.kubernetes.io/target-type: 'ip'
+    alb.ingress.kubernetes.io/load-balancer-name: "gwapi-eks-intsmm-net-internal"
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-southeast-1:730335496277:certificate/c3f59f2d-671b-4261-9b24-03231cf2e499"
+    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600"
+spec:
+  ingressClassName: alb
+  tls:
+  - hosts:
+    - gwapi.eks.intsmm.net
+  rules:
+  - host: gwapi.eks.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gw-api
+            port:
+              number: 443
+  - host: gwapi.eks.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gw-api
+            port:
+              number: 80
+---
+#WebSocket API Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ws-api-internal
+  namespace: wso2
+  annotations:
+    alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    alb.ingress.kubernetes.io/scheme: "internal"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443},{"HTTP":80}]'
+    alb.ingress.kubernetes.io/target-type: 'ip'
+    alb.ingress.kubernetes.io/load-balancer-name: "wsapi-eks-intsmm-net-internal"
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-southeast-1:730335496277:certificate/b37a11c1-09c0-44d4-972f-c222c855feca"
+    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600"
+spec:
+  ingressClassName: alb
+  tls:
+  - hosts:
+    - wsapi.eks.intsmm.net
+    secretName: ws-api-tls
+  rules:
+  - host: wsapi.eks.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ws-api
+            port:
+              number: 443
+  - host: wsapi.eks.intsmm.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ws-api
+            port:
+              number: 80
