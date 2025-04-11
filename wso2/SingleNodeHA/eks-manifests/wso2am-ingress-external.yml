@@ -97,7 +97,6 @@ spec:
   tls:
   - hosts:
     - wsapi.eks.intsmm.net
-    secretName: ws-api-tls
   rules:
   - host: wsapi.eks.intsmm.net
     http:

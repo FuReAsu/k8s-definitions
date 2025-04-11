@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: vote-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "vote.local"
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: vote
+spec:
+  hosts:
+  - "vote.local"
+  gateways:
+  - vote-gateway
+  http:
+  - route:
+     - destination: 
+        host: voting-service
+        port:
+          number: 80

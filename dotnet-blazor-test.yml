@@ -1,0 +1,65 @@
+#Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-blazor
+  labels:
+    app: simple-blazor
+spec:
+  selector:
+    matchLabels:
+      app: simple-blazor
+  replicas: 3
+  template:
+    metadata:
+      name: simple-blazor
+      labels:
+        app: simple-blazor
+    spec:
+      containers:
+        - name: simple-blazor
+          image: fureasu346/simple-blazor:ubuntu
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+---
+#ClusterIP Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-blazor
+  labels: 
+    app: simple-blazor
+spec:
+  selector:
+    app: simple-blazor
+  ports:
+    - protocol: TCP
+      port: 5080
+      targetPort: 5000
+---
+#Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-blazor
+  labels:
+    app: simple-blazor
+  annotations:
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/target-type: 'ip'
+    alb.ingress.kubernetes.io/load-balancer-name: "simple-blazor"
+    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=3600"
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: simple-blazor
+                port:
+                  number: 5080

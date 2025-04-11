@@ -23,7 +23,7 @@ spec:
           image: fureasu346/simplewebdb_webapachephp:v1
           env:
           - name: DB_SERVERNAME
-            value: "simple-db.lab.svc.cluster.local"
+            value: "simple-db.lab"
           - name: DB_NAME
             value: "testdb"
           - name: DB_USERNAME
@@ -31,7 +31,7 @@ spec:
           - name: DB_PASSWORD
             value: "webserverP@ssw0rd"
           - name: WEBSITE_NAME
-            value: "simplewebdb.lab"
+            value: "simplewebdb.local"
           ports:
             - name: http-standard
               containerPort: 80
