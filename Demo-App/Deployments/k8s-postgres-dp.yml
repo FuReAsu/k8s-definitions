@@ -21,8 +21,7 @@ spec:
         - name: postgres
           image: postgres:9.4
           ports:
-            - name: postgres-std
-              containerPort: 5432 
+            - containerPort: 5432 
               protocol: TCP
           env:
             - name: POSTGRES_USER

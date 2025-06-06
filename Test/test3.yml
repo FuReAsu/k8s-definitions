@@ -14,7 +14,7 @@ spec:
         capabilities:
           add:
             - NET_RAW
-  nodeName: k8s-lab-m1
+  nodeName: k8s-lab-m1.k8s.local
   tolerations:
       - effect: NoSchedule
         key: node-role.kubernetes.io/control-plane

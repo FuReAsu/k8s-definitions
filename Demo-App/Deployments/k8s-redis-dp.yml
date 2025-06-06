@@ -21,6 +21,5 @@ spec:
         - name: redis
           image: redis:alpine
           ports:
-            - name: redis-std
-              containerPort: 6379  
+            - containerPort: 6379  
               protocol: TCP

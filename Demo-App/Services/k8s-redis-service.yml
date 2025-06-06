@@ -8,8 +8,9 @@ metadata:
     name: redis-for-vote
 spec:
   ports:
-    - port: 6379
-      targetPort: redis-std
+    - name: tcp-redis
+      port: 6379
+      targetPort: 6379
   selector:
     role: vote
     app: redis

@@ -24,7 +24,7 @@ spec:
   - vote-gateway
   http:
   - route:
-     - destination: 
+     - destination:
         host: voting-service
         port:
           number: 80

@@ -8,8 +8,9 @@ metadata:
     name: postgres-for-result
 spec:
   ports:
-    - port: 5432
-      targetPort: postgres-std
+    - name: tcp-postgres
+      port: 5432
+      targetPort: 5432
   selector:
     role: result
     app: postgres

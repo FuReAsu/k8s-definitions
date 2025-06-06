@@ -4,7 +4,6 @@ metadata:
   name: postgres
   namespace: demo
   labels:
-    role: result
     app: postgres
 spec:
   containers:

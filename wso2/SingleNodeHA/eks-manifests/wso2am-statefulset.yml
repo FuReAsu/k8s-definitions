@@ -105,7 +105,7 @@ spec:
             runAsGroup: 0
           command: ["/bin/bash", "-c"]
           args:
-            - | 
+            - |   
               cp -r /home/wso2carbon/wso2am-4.4.0/repository/conf/* /temp/config && chown -R wso2carbon:wso2 /temp/config &&
               cp /temp/init-config/$POD_NAME /temp/config/deployment.toml
   volumeClaimTemplates:

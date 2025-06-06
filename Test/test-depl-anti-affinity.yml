@@ -7,7 +7,7 @@ spec:
     matchLabels:
       app: utility
   revisionHistoryLimit: 5
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       name: utility
@@ -17,13 +17,13 @@ spec:
       containers:
         - name: utility
           image: fureasu346/utility:v1
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - utility
-              topologyKey: "kubernetes.io/hostname"
+#affinity:
+#  podAntiAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#      - labelSelector:
+#          matchExpressions:
+#            - key: app
+#              operator: In
+#              values:
+#                - utility
+#        topologyKey: "kubernetes.io/hostname"
