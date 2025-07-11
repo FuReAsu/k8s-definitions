@@ -1,0 +1,8 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: k8s-local-pool 
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.64.101-192.168.64.150 
