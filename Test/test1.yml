@@ -14,4 +14,4 @@ spec:
         capabilities:
           add:
             - NET_RAW
-  nodeName: k8s-lab-w1
+  nodeName: k8s-worker-1.lab.local
