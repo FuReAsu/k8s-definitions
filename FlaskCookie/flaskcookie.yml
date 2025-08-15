@@ -46,3 +46,23 @@ spec:
       port: 80
       targetPort: 8765
   type: LoadBalancer
+---
+#Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flask-cookie
+  namespace: lab
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: flask-cookie.lab.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: flask-cookie
+                port:
+                  number: 80
