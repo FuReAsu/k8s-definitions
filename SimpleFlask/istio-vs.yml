@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: simple-flask
+spec:
+  hosts:
+    - "simple-flask.lab.local"
+  gateways:
+    - simple-flask
+  http:
+    - route:
+      - destination:
+          host: simple-flask
+          port:
+            number: 5080

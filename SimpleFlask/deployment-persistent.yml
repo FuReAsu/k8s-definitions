@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-flask
+  labels:
+    app: simple-flask
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simple-flask
+  template:
+    metadata:
+      name: simple-flask
+      labels:
+        app: simple-flask
+    spec:
+      restartPolicy: Always
+      volumes:
+        - name: app-data 
+          persistentVolumeClaim:
+            claimName: simple-flask
+      containers:
+        - name: simple-flask
+          image: fureasu346/simple-flask:v1
+          env:
+            - name: APP_PORT
+              value: "5080"
+            - name: APP_LOG_PATH
+              value: /app-data/log
+            - name: APP_DATA_PATH
+              value: /app-data/data
+          volumeMounts:
+            - name: app-data
+              mountPath: /app-data
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          ports:
+            - name: http
+              containerPort: 5080
