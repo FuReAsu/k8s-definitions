@@ -264,7 +264,7 @@ speaker:
   # command: /speaker
   # -- Speaker log level. Must be one of: `all`, `debug`, `info`, `warn`, `error` or `none`
   logLevel: info
-  tolerateMaster: true
+  tolerateMaster: false
   memberlist:
     # --  When enabled: false, the speaker pods must run on all nodes
     enabled: true
