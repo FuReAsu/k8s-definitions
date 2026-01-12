@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mmrcis-mssql
+  labels: 
+    app: mmrcis-mssql
+spec:
+  selector:
+    matchLabels:
+      app: mmrcis-mssql
+  template:
+    metadata:
+      name: mmrcis-mssql
+      labels:
+        app: mmrcis-mssql
+    spec:
+      restartPolicy: Always
+      volumes:
+        - name: mssql-data
+          persistentVolumeClaim:
+            claimName: mmrcis-mssql-data
+    #  initContainers:
+    #    - name: init-dir
+    #      image: fureasu346/utility:v1
+    #      command:
+    #        - bash
+    #        - "-c"
+    #        - |
+    #          if ! 
+    #      volumeMounts:
+    #        - name: mssql-data
+    #          mountPath: /tmp-data/
+      containers:
+        - name: mmrcis-mssql
+          image: mcr.microsoft.com/mssql/server:2022-latest
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: MSSQL_SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mmrcis-mssql-sa
+                  key: password
+          volumeMounts:
+            - name: mssql-data
+              mountPath: /var/opt/mssql/data
+          resources:
+            requests:
+              cpu: 256m
+              memory: 512M
+            limits:
+              cpu: 1000m
+              memory: 1G
