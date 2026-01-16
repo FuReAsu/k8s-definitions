@@ -1,7 +1,12 @@
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
+name: lab
 nodes:
 - role: control-plane
 - role: worker
 - role: worker
 - role: worker
+networking:
+  podSubnet: "10.128.0.0/16"
+  serviceSubnet: "10.240.0.0/12"
+  disableDefaultCNI: true
