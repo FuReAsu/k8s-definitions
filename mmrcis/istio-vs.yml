@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: mmrcis
+spec:
+  hosts:
+    - "mmrcis.lab.local"
+  gateways:
+    - mmrcis
+  http:
+    - route:
+      - destination:
+          host: mmrcis
+          port:
+            number: 5000

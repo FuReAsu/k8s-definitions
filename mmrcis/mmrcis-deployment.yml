@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mmrcis
+  labels:
+    app: mmrcis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mmrcis
+  template:
+    metadata:
+      labels:
+        app: mmrcis
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: mmrcis
+          image: fureasu346/mmrcis:main
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://0.0.0.0:5000"
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: mmrcis-mssql-sa
+                  key: connection-string
+          ports:
+            - name: http
+              containerPort: 5000
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512M"
+            requests:
+              cpu: "125m"
+              memory: "256M"
