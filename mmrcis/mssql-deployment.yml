@@ -14,6 +14,10 @@ spec:
       labels:
         app: mmrcis-mssql
     spec:
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
       restartPolicy: Always
       volumes:
         - name: mssql-data
