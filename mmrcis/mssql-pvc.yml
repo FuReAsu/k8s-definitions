@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mmrcis-mssql-data
 spec:
-  storageClassName: longhorn
+  storageClassName: standard
   accessModes:
     - ReadWriteOnce
   resources:
