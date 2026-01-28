@@ -17,8 +17,12 @@ DNS.1 = simple-flask.lab.local
 openssl x509 -req -in simple-flask.csr -out simple-flask.crt -signkey simple-flask.key -days 365 -sha256 -extfile simple-flask.ext
 ```
 
-## TLS secret for Gateway Ingress
+## TLS secret for Istio Gateway Ingress
 
 ```bash
-kubectl -n lab create secret tls simple-flask-tls --cert=./simple-flask.crt --key=./simple-flask.key
+kubectl -n istio-system create secret tls simple-flask-tls --cert=./simple-flask.crt --key=./simple-flask.key
 ```
+> [!NOTE]
+> The tls secret must be in istio-system namespace or in the same namespace as the istioingressgateway pod.
+> The istioingressgateway pod uses the tls secret to perform TLS termination for each gateway resources defined.
+> A more refined pattern would be centralized gateways (with multiple host matchings) that use multiple tls secrets all in istio-system.
